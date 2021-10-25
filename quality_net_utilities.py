@@ -9,7 +9,7 @@ from tensorflow import keras
 
 def quality_net_model(defined_model,h,w):
     prediction_layer = keras.Sequential(
-        [keras.layers.Dense(256,activation='relu'),
+        [keras.layers.Dense(512,activation='relu'),
          keras.layers.Dense(1,'sigmoid')])
 
     inputs = tf.keras.Input(shape=(h, w, 3))
@@ -37,19 +37,19 @@ class ColourAugmentation(keras.layers.Layer):
         self.saturation_upper = saturation_upper
         self.min_jpeg_quality = min_jpeg_quality
         self.max_jpeg_quality = max_jpeg_quality
-        
+
     def brightness(self,x):
         return tf.image.random_brightness(
             x,self.brightness_delta)
-    
+
     def contrast(self,x):
         return tf.image.random_contrast(
             x,self.contrast_lower,self.contrast_upper)
-    
+
     def hue(self,x):
         return tf.image.random_hue(
             x,self.hue_delta)
-    
+
     def saturation(self,x):
         return tf.image.random_saturation(
             x,self.saturation_lower,self.saturation_upper)
@@ -72,12 +72,12 @@ class ColourAugmentation(keras.layers.Layer):
             x = jpeg_quality(x)
         x = tf.clip_by_value(x,0,1)
         return x
-    
+
 class Flipper(keras.layers.Layer):
     def __init__(self,probability=0.1):
         super(Flipper,self).__init__()
         self.probability = probability
-            
+
     def call(self,x):
         if np.random.uniform() < self.probability:
             x = tf.image.flip_left_right(x)
@@ -115,7 +115,7 @@ class DataGenerator:
         self.transform = transform
         self.all_keys = list(self.h5.keys())
         self.n_images = len(self.all_keys)
-    
+
     def generate(self,with_path=False):
         image_idx = [x for x in range(self.n_images)]
         if self.shuffle == True:
@@ -133,8 +133,8 @@ class LargeImage:
     def __init__(self,image,tile_size=[512,512],
                  output_channels=3,offset=0):
         """
-        Class facilitating the prediction for large images by 
-        performing all the necessary operations - tiling and 
+        Class facilitating the prediction for large images by
+        performing all the necessary operations - tiling and
         reconstructing the output.
         """
         self.image = image

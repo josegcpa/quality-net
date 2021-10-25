@@ -62,7 +62,7 @@ if __name__ == "__main__":
         'probability':args.probability}
 
     print("Setting up network...")
-    mobilenet_v2 = keras.applications.MobileNetV2(
+    mobilenet_v2 = keras.applications.DenseNet121(
         input_shape=[args.input_height,args.input_width,3],
         include_top=False,classes=2,pooling='max')
     quality_net = quality_net_model(

@@ -11,6 +11,9 @@ if __name__ == "__main__":
     parser.add_argument('--dataset_path',dest='dataset_path',
                         action='store',type=str,default=None,
                         help="Path to hdf5 dataset.")
+    parser.add_argument('--checkpoint_path',dest='checkpoint_path',
+                        action='store',type=str,default=None,
+                        help="Path to hdf5 dataset.")
     parser.add_argument('--input_height',dest = 'input_height',
                         action = 'store',type = int,default = 256,
                         help = 'The file extension for all images.')
@@ -25,17 +28,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     print("Setting up network...")
-    mobilenet_v2 = keras.applications.MobileNetV2(
-        input_shape=[args.input_height,args.input_width,3],
-        include_top=False,classes=2,pooling='max')
-    quality_net = quality_net_model(
-        mobilenet_v2,args.input_height,args.input_width)
+    quality_net = keras.models.load_model(args.checkpoint_path)
 
     print("Setting up data generator...")
     data_generator = DataGenerator(args.dataset_path,None)
     def load_generator():
         for image,label in data_generator.generate():
             yield image,label
+
     generator = load_generator
     output_types = (tf.float32,tf.float32)
     output_shapes = (
@@ -43,7 +43,6 @@ if __name__ == "__main__":
         tf.TensorShape((1)))
     tf_dataset = tf.data.Dataset.from_generator(
         generator,output_types=output_types,output_shapes=output_shapes)
-    tf_dataset = tf_dataset.repeat()
     tf_dataset = tf_dataset.batch(args.batch_size)
     tf_dataset = tf_dataset.prefetch(args.batch_size*5)
 

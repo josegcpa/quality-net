@@ -127,7 +127,10 @@ class DataGenerator:
             x = tf.convert_to_tensor(x) / 255
             if self.transform is not None:
                 x = self.transform(x)
-            yield x,c
+            if with_path == True:
+                yield x,c,[P]
+            else:
+                yield x,c
 
 class LargeImage:
     def __init__(self,image,tile_size=[512,512],

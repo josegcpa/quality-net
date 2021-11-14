@@ -7,13 +7,13 @@ python3 train-quality-net.py \
     --save_checkpoint_folder checkpoints/quality-net/quality-net \
     --batch_size 32 \
     --number_of_epochs 25 \
-    --learning_rate 0.00005 \
-    --brightness_max_delta 0.02 \
+    --learning_rate 0.0001 \
+    --brightness_max_delta 0.05 \
     --saturation_lower 0.9 \
     --saturation_upper 1.1 \
     --hue_max_delta 0.1 \
     --contrast_lower 0.9 \
     --contrast_upper 1.1 \
-    --min_jpeg_quality 90 \
-    --max_jpeg_quality 100 \
+    --min_jpeg_quality 100 \
+    --max_jpeg_quality 90 \
     --probability 0.6

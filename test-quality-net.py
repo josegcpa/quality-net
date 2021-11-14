@@ -46,7 +46,7 @@ if __name__ == "__main__":
     tf_dataset = tf_dataset.batch(args.batch_size)
     tf_dataset = tf_dataset.prefetch(args.batch_size*5)
 
-    print("Setting up training...")
+    print("Setting up testing...")
     auc = tf.keras.metrics.AUC()
     acc = Accuracy()
     rec = Recall()
